@@ -2,7 +2,7 @@
   "name": "p2p-nodejs-chat",
   "version": "1.0.0",
   "main": "src/index.ts",
-  "repository": "https://github.com/cpurificacao/P2PChat.git",
+  "repository": "https://github.com/cpurificacao/p2p-nodejs-chat.git",
   "author": "cpurificacao <carlos_dbdesktop@outlook.com>",
   "license": "MIT",
   "scripts": {
