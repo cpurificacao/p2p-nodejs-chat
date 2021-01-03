@@ -1,0 +1,8 @@
+{
+  "name": "p2p-nodejs-chat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/cpurificacao/P2PChat.git",
+  "author": "cpurificacao <carlos_dbdesktop@outlook.com>",
+  "license": "MIT"
+}
