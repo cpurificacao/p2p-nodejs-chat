@@ -2,13 +2,14 @@ import net, { NetConnectOpts } from "net";
 
 export default class Peer {
   private connections: net.Socket[] = [];
+  private declare server: net.Server;
 
   constructor(private port: number) {
     this.port = port;
 
-    const server = net.createServer((socket) => this.onSocketConnect(socket));
+    this.server = net.createServer((socket) => this.onSocketConnect(socket));
 
-    server.listen(port, () => console.log(`Listening to port ${port}...`));
+    this.server.listen(port, () => console.log(`Listening to port ${port}...`));
   }
 
   public connectTo(address: string): void {
@@ -29,29 +30,31 @@ export default class Peer {
     );
   }
 
+  public broadcast(data: string): void {
+    this.connections.forEach((socket) => socket.write(data));
+  }
+
   private onSocketConnect(socket: net.Socket): void {
+    socket.write("New connection...");
+
     this.connections.push(socket);
 
     socket.on("end", () => this.onEnd(socket));
 
     socket.on("data", (data) => this.onData(socket, data));
+
+    console.clear();
   }
 
   private onData(socket: net.Socket, data: Buffer | string): void {
     data = data.toString();
 
-    console.log("Received:", data);
-
-    socket.write(data);
+    console.log(`(${socket.remoteAddress}:${socket.remotePort}) -> ${data}`);
   }
 
   private onEnd(socket: net.Socket): void {
     console.log(
-      `Ended connection! (${socket.localPort} | ${socket.remotePort})`
+      `(${socket.remoteAddress}:${socket.remotePort}) -> Ended connection...`
     );
-  }
-
-  private broadcast(data: string) {
-    this.connections.forEach((socket) => socket.write(data));
   }
 }

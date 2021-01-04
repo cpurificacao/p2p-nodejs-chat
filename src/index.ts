@@ -25,3 +25,11 @@ process.argv.slice(2).forEach((argv) => {
     }
   }
 });
+
+process.stdin.on("data", (data: Buffer) => {
+  console.clear();
+
+  const message = data.toString().replace(/\n/g, "");
+
+  peer.broadcast(message);
+});
