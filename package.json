@@ -6,7 +6,7 @@
   "author": "cpurificacao <carlos_dbdesktop@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "ts-run": "sucrase-node",
+    "ts-run": "sucrase-node src/index.ts",
     "dev": "nodemon",
     "build": "sucrase ./src -d ./build --transforms typescript,imports"
   },
