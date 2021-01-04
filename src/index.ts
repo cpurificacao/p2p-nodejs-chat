@@ -1,11 +1,27 @@
 import Peer from "./peer";
 
-const port = +(process.env.PORT as string);
+let peer: Peer;
 
-if (!port) throw new Error("Enter a port for connection!");
+process.argv.slice(2).forEach((argv) => {
+  if (/-\w+=.+/.test(argv)) {
+    const parts = argv.split("=");
 
-console.log("PORT:", port);
+    let [cmd, text] = parts;
 
-const peer = new Peer(port);
+    cmd = cmd.slice(1).toLowerCase();
+    text = text.toLowerCase();
 
-process.argv.slice(2).forEach((peerAddr) => peer.connectTo(peerAddr));
+    // Commands
+    if (cmd == "port") {
+      const port = +(text as string);
+
+      peer = new Peer(port);
+    }
+
+    if (cmd == "peer") {
+      const address = text;
+
+      peer.connectTo(address);
+    }
+  }
+});

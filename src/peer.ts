@@ -1,19 +1,19 @@
 import net, { NetConnectOpts } from "net";
 
 export default class Peer {
-  private connections = [];
+  private connections: net.Socket[] = [];
 
   constructor(private port: number) {
     this.port = port;
 
-    const server = net.createServer((sock) => {
-      console.log("New connection detected!", sock.remotePort);
-    });
+    const server = net.createServer((socket) => this.onConnection(socket));
+
+    console.log("New peer created!");
 
     server.listen(port, () => console.log(`Listening to port ${port}...`));
   }
 
-  public connectTo(peerAddress: string) {
+  public connectTo(peerAddress: string): void {
     const parts = peerAddress.split(":");
 
     if (parts.length !== 2) {
@@ -26,6 +26,17 @@ export default class Peer {
         port: +port,
       };
 
-    net.createConnection(conn, () => console.log("Connection created!"));
+    const socket: net.Socket = net.createConnection(conn, () =>
+      this.onConnection(socket)
+    );
+  }
+
+  private onConnection(socket: net.Socket): void {
+    console.log(
+      "New connection detected!",
+      `${socket.remotePort} | ${socket.localPort}`
+    );
+
+    this.connections.push(socket);
   }
 }
